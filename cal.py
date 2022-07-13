@@ -1,16 +1,48 @@
-from tkinter import Tk, E, W, font
+from tkinter import Tk, E, W, END, messagebox
 from tkinter.ttk import Label, Button, Entry, Style
+
+# nums collects entered numbers in box
+nums = []
+# op collect required operator
+operator = ''
+
+def calculating(ent_operator):
+    global nums, operator
+    try:
+        nums.append(float(ent_exp.get()))
+        operator = ent_operator
+    except ValueError:
+        messagebox.showerror('Invalid input', 'You may forgot to fill the box, or did not enter a number!')
+    else:
+        lbl_ans['text'] = str(nums[0]) + ' ' + operator
+        lbl_ans.grid(
+            row=0,
+            column=0,
+        )
+
+        ent_exp.delete(0, END)
+
+        if len(nums) == 2:
+            if operator == '+':
+                res = nums[0] + nums[1]
+                nums.clear()
+                lbl_ans['text'] = res
+                lbl_ans.grid(
+                    row=0,
+                    column=0,
+                )
+
 
 win_cal = Tk()
 win_cal.title('Calculater')
-win_cal.config(bg='#231955')
+win_cal.config(bg='#3F4E4F')
 
 lbl_ans = Label(
     master=win_cal,
     text='ans',
-    background='#231955',
-    foreground='#F9F9C5',
-    font=('Arial', 12)
+    background='#3F4E4F',
+    foreground='white',
+    font=('Arial', 14)
 )
 lbl_ans.grid(
     row=0,
@@ -32,7 +64,7 @@ ent_exp.grid(
 # designe buttons
 style = Style()
 style.theme_use('alt')
-style.configure('TButton', background = 'black', foreground = 'white', width = 10, borderwidth=2, focusthickness=3, focuscolor='none')
+style.configure('TButton', background = '#2C3639', foreground = 'white', width = 10, borderwidth=2, focusthickness=3, focuscolor='none')
 style.configure('TButton', font=('Helvetica', 14))
 style.map('TButton', background=[('active','gray')]) 
 
@@ -169,16 +201,20 @@ btn_min.grid(
 btn_plus = Button(
     master=win_cal,
     text='+',
+    command=lambda: calculating('+')
 )
 btn_plus.grid(
     row=6,
     column=3,
     ipady=10,
 )
+
 btn_eq = Button(
     master=win_cal,
     text='=',
+    command=lambda: calculating(operator)
 )
+win_cal.bind('<Return>', lambda *args: calculating(operator))
 btn_eq.grid(
     row=7,
     column=3,
